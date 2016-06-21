@@ -31,31 +31,22 @@
 <?import javafx.scene.layout.BorderPane?>
 
 
-<StackPane fx:id="root" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml">
+<StackPane fx:id="root" xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
 
         <top>
             <VBox spacing="20">
                 <JFXToolbar>
                     <leftItems>
-                        <JFXRippler maskType="CIRCLE" style="-fx-ripple-color:WHITE;">
-                            <StackPane fx:id="titleBurgerContainer">
+                        <JFXRippler  fx:id="titleBurgerContainer" maskType="CIRCLE" style="-fx-ripple-color:WHITE;">
+                            <StackPane >
                                 <JFXHamburger fx:id="titleBurger">
                                     <HamburgerBackArrowBasicTransition />
                                 </JFXHamburger>
                             </StackPane>
                         </JFXRippler>
-                        <Label>Notifications</Label>
+                        <Label fx:id="fragmentTitle" >Notifications</Label>
                     </leftItems>
-                    <rightItems>
-                        <JFXRippler fx:id="optionsRippler" maskType="CIRCLE"
-                                                            style="-fx-ripple-color:WHITE;">
-                            <StackPane fx:id="optionsBurger">
-                                <JFXHamburger styleClass="jfx-options-burger">
-                                </JFXHamburger>
-                            </StackPane>
-                        </JFXRippler>
-                    </rightItems>
                 </JFXToolbar>
             </VBox>
         </top>
@@ -71,35 +62,9 @@
                     </StackPane>
                 </sidePane>
                 <content>
-                    <AnchorPane fx:id="content" >
-                        <children>
-                            <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-                            <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-                        </children>
-                    </AnchorPane>
                 </content>
             </JFXDrawer>
         </center>
     </BorderPane>
-
-    <JFXPopup fx:id="toolbarPopup" styleClass="tool-bar-popup">
-        <JFXListView styleClass="option-list-view">
-            <Label >
-                Contact Us
-                <graphic>
-                    <de.jensd.fx.glyphs.materialicons.MaterialIconView glyphName="ACCOUNT_CIRCLE" size="1.5em" style=";"
-                                              styleClass="option-jfx-list-view-icon" />
-                </graphic>
-            </Label>
-            <Label fx:id="exit">
-                Exit
-                <graphic>
-                    <de.jensd.fx.glyphs.materialicons.MaterialIconView glyphName="REPLY" size="1.5em" style=";"
-                                              styleClass="option-jfx-list-view-icon" />
-                </graphic>
-            </Label>
-        </JFXListView>
-    </JFXPopup>
-
 
 </StackPane>

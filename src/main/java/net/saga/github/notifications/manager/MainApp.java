@@ -37,7 +37,8 @@ public class MainApp extends Application {
         JFXDecorator decorator = new JFXDecorator(stage, container.getView());
         decorator.setCustomMaximize(true);
         Scene scene = new Scene(decorator, 800, 800);
-        scene.getStylesheets().add("/styles/Styles.css");
+        scene.getStylesheets().add("/styles/rootPanel.css");
+        scene.getStylesheets().add("/styles/hd.css");
 
         stage.setMinWidth(700);
         stage.setMinHeight(800);
