@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <WebView fx:id="loginWebView" maxHeight="640.0" maxWidth="480.0" minHeight="640.0" minWidth="480.0" prefHeight="640.0" prefWidth="480.0" >
+         <effect>
+            <DropShadow />
+         </effect></WebView>
+   </center>
+   <padding>
+      <Insets bottom="42.0" left="42.0" right="42.0" top="42.0" />
+   </padding>
+</BorderPane>

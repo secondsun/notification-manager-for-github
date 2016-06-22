@@ -1,15 +1,16 @@
 package net.saga.github.notifications.manager;
 
+import net.saga.github.notifications.manager.controller.MainController;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.svg.SVGGlyphLoader;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.datafx.controller.flow.Flow;
-import org.datafx.controller.flow.container.DefaultFlowContainer;
-import org.datafx.controller.flow.context.FXMLViewFlowContext;
-import org.datafx.controller.flow.context.ViewFlowContext;
+import io.datafx.controller.flow.Flow;
+import io.datafx.controller.flow.container.DefaultFlowContainer;
+import io.datafx.controller.flow.context.FXMLViewFlowContext;
+import io.datafx.controller.flow.context.ViewFlowContext;
+import static javafx.application.Application.launch;
 
 public class MainApp extends Application {
 
@@ -28,7 +29,7 @@ public class MainApp extends Application {
             }
         }).start();
 
-        Flow flow = new Flow(FXMLController.class);
+        Flow flow = new Flow(MainController.class);
         DefaultFlowContainer container = new DefaultFlowContainer();
         flowContext = new ViewFlowContext();
         flowContext.register("Stage", stage);

@@ -31,7 +31,7 @@
 <?import javafx.scene.layout.BorderPane?>
 
 
-<StackPane fx:id="root" xmlns:fx="http://javafx.com/fxml">
+<StackPane  xmlns:fx="http://javafx.com/fxml">
     <BorderPane>
 
         <top>
@@ -53,17 +53,7 @@
 
         <!-- Content Area -->
         <center>
-            <JFXDrawer fx:id="drawer" defaultDrawerSize="250" direction="LEFT">
-                <styleClass>
-                    <String fx:value="body" />
-                </styleClass>
-                <sidePane>
-                    <StackPane fx:id="sideContent">
-                    </StackPane>
-                </sidePane>
-                <content>
-                </content>
-            </JFXDrawer>
+            <StackPane fx:id="root"></StackPane>
         </center>
     </BorderPane>
 
