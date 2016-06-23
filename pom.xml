@@ -17,6 +17,11 @@
             <name>bintray</name>
             <url>http://dl.bintray.com/jerady/maven</url>
         </repository>
+        <repository>
+            <id>libs</id>
+            <name>libs which had to be compiled for this app</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -194,6 +199,21 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.12.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.12.1.1</version>
         </dependency>
     </dependencies>
 </project>

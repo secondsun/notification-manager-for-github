@@ -18,12 +18,14 @@
  */
 package net.saga.github.notifications.manager.net;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import net.saga.github.notifications.manager.persistence.PropertyManager;
 import org.apache.commons.lang.StringUtils;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -47,6 +49,9 @@ public class NotificationsClient {
     private static final String AUTHZ_REDIRECT_URL = "urn:ietf:wg:oauth:2.0:oob";
 
     private String bearerToken = "";
+    private static final String ACCESS_TOKEN = "NotificationsClient.ACCESS_TOKEN";
+    private static final String REFRESH_TOKEN = "NotificationsClient.REFRESH_TOKEN";
+    private static final String EXPIRES_AT = "NotificationsClient.ESPIRES_AT";
 
     public String login() throws OAuthSystemException {
         OAuthClientRequest request = OAuthClientRequest
@@ -91,7 +96,7 @@ public class NotificationsClient {
                 .setRedirectURI(AUTHZ_REDIRECT_URL)
                 .setGrantType(GrantType.AUTHORIZATION_CODE)
                 .setCode(code)
-                .buildQueryMessage();
+                .buildBodyMessage();
 
         
         OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
@@ -99,9 +104,16 @@ public class NotificationsClient {
         OAuthJSONAccessTokenResponse oAuthResponse = oAuthClient.accessToken(request);
 
         System.out.println(oAuthResponse);
-        
-        return oAuthResponse.getAccessToken();
-        
+        PropertyManager.write(ACCESS_TOKEN, oAuthResponse.getAccessToken());
+        PropertyManager.write(REFRESH_TOKEN, oAuthResponse.getRefreshToken());
+        PropertyManager.write(EXPIRES_AT, getExpiresAt(oAuthResponse));
+        bearerToken = oAuthResponse.getAccessToken();
+        return oAuthResponse.getAccessToken();        
+    }
+    
+    private String getExpiresAt(OAuthJSONAccessTokenResponse oAuthResponse) {
+        LocalDateTime time = LocalDateTime.now().plusSeconds(oAuthResponse.getExpiresIn());
+        return time.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
 }
