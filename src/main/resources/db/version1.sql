@@ -7,4 +7,3 @@ create table Repository (jpaId bigint not null, description varchar(255), fork b
 alter table Notification add constraint FK5kwjc7d9bp8weijbhe4evjoly foreign key (repository_jpaId) references Repository;
 alter table Notification add constraint FK70jp81julgkk51h0nqrh2f48u foreign key (subject_jpaId) references NotificationSubject;
 alter table Repository add constraint FK5r01fw32acisnq8bf8vmagg3d foreign key (owner_jpaId) references GitHubUser;
-

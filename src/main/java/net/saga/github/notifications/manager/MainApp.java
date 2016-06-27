@@ -11,11 +11,13 @@ import io.datafx.controller.flow.container.DefaultFlowContainer;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import static javafx.application.Application.launch;
+import net.saga.github.notifications.manager.persistence.DerbyBootStrap;
 
 public class MainApp extends Application {
 
     @FXMLViewFlowContext
     private ViewFlowContext flowContext;
+    private DerbyBootStrap bootStrap;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -47,6 +49,22 @@ public class MainApp extends Application {
         stage.show();
 
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        this.bootStrap.close();
+    }
+
+    @Override
+    public void init() throws Exception {
+        super.init();
+        this.bootStrap = new DerbyBootStrap();
+        bootStrap.startUp();
+    }
+    
+   
+    
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
