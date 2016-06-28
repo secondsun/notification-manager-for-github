@@ -69,9 +69,10 @@ public class DerbyBootStrap implements AutoCloseable {
 
     private boolean databaseExists(Connection conn) throws SQLException {
         
-        try (ResultSet res = conn.prepareCall("SELECT * FROM sys.systables").executeQuery()) {
+        try (ResultSet res = conn.prepareCall("SELECT * FROM sys.systables ").executeQuery()) {
             while (res.next()) {
-                return true;
+                if (res.getString(2).equalsIgnoreCase("version"))
+                    return true;
             }
             return false;
         }

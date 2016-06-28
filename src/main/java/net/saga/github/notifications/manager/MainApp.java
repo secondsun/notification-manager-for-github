@@ -12,12 +12,14 @@ import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import static javafx.application.Application.launch;
 import net.saga.github.notifications.manager.persistence.DerbyBootStrap;
+import net.saga.github.notifications.manager.persistence.HibernateComponent;
 
 public class MainApp extends Application {
 
     @FXMLViewFlowContext
     private ViewFlowContext flowContext;
     private DerbyBootStrap bootStrap;
+    private HibernateComponent hibernate;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -38,7 +40,7 @@ public class MainApp extends Application {
         flow.createHandler(flowContext).start(container);
 
         JFXDecorator decorator = new JFXDecorator(stage, container.getView());
-        decorator.setCustomMaximize(true);
+        //decorator.setCustomMaximize(true);
         Scene scene = new Scene(decorator, 800, 800);
         scene.getStylesheets().add("/styles/rootPanel.css");
         scene.getStylesheets().add("/styles/hd.css");
@@ -53,6 +55,7 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
+        this.hibernate.close();
         this.bootStrap.close();
     }
 
@@ -61,6 +64,10 @@ public class MainApp extends Application {
         super.init();
         this.bootStrap = new DerbyBootStrap();
         bootStrap.startUp();
+        
+        this.hibernate = new  HibernateComponent();
+        hibernate.open();
+        
     }
     
    
