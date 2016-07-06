@@ -18,6 +18,7 @@
  */
 package net.saga.github.notifications.manager.controller;
 
+import com.google.common.eventbus.Subscribe;
 import com.jfoenix.controls.JFXProgressBar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,15 +31,21 @@ import javax.annotation.PostConstruct;
 import io.datafx.controller.ViewController;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.FlowException;
+import io.datafx.controller.flow.FlowHandler;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
+import java.util.concurrent.ExecutionException;
+import javax.swing.JOptionPane;
+import net.saga.github.notifications.manager.MainApp;
+import net.saga.github.notifications.manager.service.auth.AuthEvent;
+import static net.saga.github.notifications.manager.service.auth.AuthEvent.NOT_LOGGED_IN;
 
 /**
  *
  * @author summers
  */
 @ViewController(value = "/fxml/Loading.fxml", title = "Loading")
-public class LoadingController  {
+public class LoadingController {
 
     @FXMLViewFlowContext
     private ViewFlowContext context;
@@ -51,33 +58,58 @@ public class LoadingController  {
 
     @FXML
     private JFXProgressBar progress;
+    private StackPane root;
 
     @PostConstruct
     public void init() {
         progress.prefWidthProperty().bind(container.widthProperty());
         text.wrappingWidthProperty().bind(container.widthProperty());
 
-        StackPane root = (StackPane) context.getRegisteredObject("ContentPane");
+        root = (StackPane) context.getRegisteredObject("ContentPane");
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(
-                        3000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(LoadingController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        MainApp.BUS.register(this);
+        MainApp.AUTH.init();
+
+    }
+
+    @Subscribe
+    public void handleAuthEvent(AuthEvent authEvent) throws InterruptedException, ExecutionException {
+        if (authEvent == NOT_LOGGED_IN) {
             Platform.runLater(() -> {
                 try {
                     Flow newFlow = new Flow(WebViewController.class);
-                    root.getChildren().setAll(newFlow.start());
+                    FlowHandler handler = newFlow.createHandler(context);
+                        root.getChildren().setAll(handler.start());
                 } catch (FlowException ex) {
                     Logger.getLogger(LoadingController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-        }).start();
-        
-        
+        } else {
+            MainApp.BUS.unregister(this);
+
+            if (MainApp.ACCOUNT.hasGithubToken().get()) {
+                Platform.runLater(() -> {
+                    try {
+                        Flow newFlow = new Flow(NotificationListController.class);
+                        FlowHandler handler = newFlow.createHandler(context);
+                        root.getChildren().setAll(handler.start());
+                    } catch (FlowException ex) {
+                        Logger.getLogger(LoadingController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            } else {
+                Platform.runLater(() -> {
+                    try {
+                        Flow newFlow = new Flow(GitHubTokenController.class);
+                        FlowHandler handler = newFlow.createHandler(context);
+                        root.getChildren().setAll(handler.start());
+                    } catch (FlowException ex) {
+                        Logger.getLogger(LoadingController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+
+        }
     }
 
-    
 }

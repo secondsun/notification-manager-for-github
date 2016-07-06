@@ -18,32 +18,38 @@
  */
 package net.saga.github.notifications.manager.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.net.URL;
 import java.time.ZonedDateTime;
-import javax.persistence.CascadeType;
+import java.util.Objects;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author summers
  */
 @Entity
-public class Notification implements Serializable {
+@Table(indexes = {@Index(name = "notification_id", unique = true, columnList = "id, userId")})
+public class Notification implements Serializable, Comparable<Notification> {
 
     @Id
     @GeneratedValue
+    @JsonIgnore
     private Long jpaId;
 
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Repository repository;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Embedded
     private NotificationSubject subject;
 
     private String reason;
@@ -135,4 +141,49 @@ public class Notification implements Serializable {
         this.userId = userId;
     }
 
+    public static Notification shallowClone(Notification notification) {
+        Notification toReturn = new Notification();
+        toReturn.id = notification.id;
+        toReturn.reason = notification.reason;
+        toReturn.unread = notification.unread;
+        toReturn.userId = notification.userId;
+        toReturn.subject = notification.subject;
+        return toReturn;
+    }
+
+    @Override
+    public int compareTo(Notification o) {
+        if (!updated_at.equals(o.updated_at)) {
+            return updated_at.compareTo(o.updated_at);
+        } return repository.getName().compareTo(o.repository.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Notification other = (Notification) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
 }
+

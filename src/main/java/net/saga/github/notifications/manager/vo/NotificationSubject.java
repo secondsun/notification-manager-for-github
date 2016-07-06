@@ -20,41 +20,19 @@ package net.saga.github.notifications.manager.vo;
 
 import java.io.Serializable;
 import java.net.URL;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  *
  * @author summers
  */
-@Entity
+@Embeddable
 public class NotificationSubject implements Serializable {
 
-    @Id
-    @GeneratedValue
-    private Long jpaId;
-
-    public Long getJpaId() {
-        return jpaId;
-    }
-
-    public void setJpaId(Long jpaId) {
-        this.jpaId = jpaId;
-    }
-    
-    
-    private Long id;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     private String title;
+    
+    @Column(name = "subject_url")
     private URL url;
     private URL latest_comment_url;
     private String type;

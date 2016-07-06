@@ -1,4 +1,4 @@
-package net.saga.github.notifications.manager.persistence;
+package net.saga.github.notifications.service.persistence;
 
 import org.hibernate.Session;
 

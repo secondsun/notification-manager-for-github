@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package net.saga.github.notifications.manager.persistence;
+package net.saga.github.notifications.service.persistence;
 
 import com.sun.istack.internal.NotNull;
 import java.io.BufferedReader;
@@ -77,7 +77,7 @@ public class PropertyManager {
         }
         try {
             open();
-            return Optional.of(properties.getProperty(property));
+            return Optional.ofNullable(properties.getProperty(property));
         } finally {
             close();
         }

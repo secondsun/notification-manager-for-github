@@ -1,5 +1,7 @@
 package net.saga.github.notifications.manager;
 
+import com.google.common.eventbus.AsyncEventBus;
+import com.google.common.eventbus.EventBus;
 import net.saga.github.notifications.manager.controller.MainController;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.svg.SVGGlyphLoader;
@@ -10,16 +12,26 @@ import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
 import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
+import java.util.concurrent.Executors;
+import net.saga.github.notifications.service.persistence.DerbyBootStrap;
+import net.saga.github.notifications.service.persistence.HibernateModule;
 import static javafx.application.Application.launch;
-import net.saga.github.notifications.manager.persistence.DerbyBootStrap;
-import net.saga.github.notifications.manager.persistence.HibernateComponent;
+import net.saga.github.notifications.manager.service.auth.AuthModule;
+import net.saga.github.notifications.manager.service.net.AccountModule;
+import net.saga.github.notifications.manager.service.net.RealtimePushModule;
 
 public class MainApp extends Application {
 
+    public static final EventBus BUS = new AsyncEventBus(Executors.newCachedThreadPool());
+    public static final HibernateModule HIBERNATE = new HibernateModule();
+    public static final AuthModule AUTH = new AuthModule(BUS);
+    public static final AccountModule ACCOUNT = new AccountModule(AUTH, BUS);
+    public static final RealtimePushModule NOTIFICATIONS = new RealtimePushModule(AUTH, HIBERNATE, BUS);
+    
     @FXMLViewFlowContext
     private ViewFlowContext flowContext;
+    
     private DerbyBootStrap bootStrap;
-    private HibernateComponent hibernate;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -34,6 +46,7 @@ public class MainApp extends Application {
         }).start();
 
         Flow flow = new Flow(MainController.class);
+        
         DefaultFlowContainer container = new DefaultFlowContainer();
         flowContext = new ViewFlowContext();
         flowContext.register("Stage", stage);
@@ -55,7 +68,7 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        this.hibernate.close();
+        this.HIBERNATE.close();
         this.bootStrap.close();
     }
 
@@ -65,8 +78,7 @@ public class MainApp extends Application {
         this.bootStrap = new DerbyBootStrap();
         bootStrap.startUp();
         
-        this.hibernate = new  HibernateComponent();
-        hibernate.open();
+        HIBERNATE.open();
         
     }
     

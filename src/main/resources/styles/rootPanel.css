@@ -25,6 +25,12 @@
 	-fx-text-fill: WHITE;
 }
 
+#githubToken {
+        -fx-background-color: WHITE;
+	-fx-text-fill: WHITE;
+        
+}
+
 
 .jfx-decorator {
 	-fx-decorator-color: derive(#5264AE,-20%);

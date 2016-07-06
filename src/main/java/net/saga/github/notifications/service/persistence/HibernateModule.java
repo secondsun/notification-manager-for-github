@@ -1,4 +1,4 @@
-package net.saga.github.notifications.manager.persistence;
+package net.saga.github.notifications.service.persistence;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  *
  * @author secon
  */
-public class HibernateComponent implements AutoCloseable{
+public class HibernateModule implements AutoCloseable{
 
     private SessionFactory sessionFactory;
 

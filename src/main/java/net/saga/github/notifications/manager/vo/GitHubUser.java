@@ -20,30 +20,24 @@ package net.saga.github.notifications.manager.vo;
 
 import java.io.Serializable;
 import java.net.URL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author summers
  */
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"login"})}, indexes = {
+    @Index(unique = true, columnList = "login")})
 public class GitHubUser implements Serializable {
 
     @Id
-    @GeneratedValue
-    private Long jpaId;
-
-    public Long getJpaId() {
-        return jpaId;
-    }
-
-    public void setJpaId(Long jpaId) {
-        this.jpaId = jpaId;
-    }
-    
-    
     private Long id;
 
     public Long getId() {
@@ -54,6 +48,7 @@ public class GitHubUser implements Serializable {
         this.id = id;
     }
 
+    @Column(columnDefinition = "varchar(255) UNIQUE")
     private String login;
     private URL avatar_url;
     private String gravatar_id;
@@ -199,6 +194,4 @@ public class GitHubUser implements Serializable {
         this.site_admin = site_admin;
     }
 
-    
-    
 }

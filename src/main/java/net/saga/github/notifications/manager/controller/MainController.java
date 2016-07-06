@@ -48,13 +48,7 @@ public class MainController implements Initializable {
         root.getChildren()
                 .setAll(flowHandler.start(new AnimatedFlowContainer()));
 
-    //        drawer.setContent(flowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
-    //        context.register("ContentPane", drawer.getContent().get(0));
-    //
-    //        // side controller will add links to the content flow
-    //        Flow sideMenuFlow = new Flow(SideMenuController.class);
-    //        sideMenuFlowHandler = sideMenuFlow.createHandler(context);
-    //        drawer.setSidePane(sideMenuFlowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
+    
     }
 
 }
